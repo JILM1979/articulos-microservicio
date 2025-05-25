@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
     console.log('Invocado get /');
     const result = await db.query('SELECT * FROM articulo ORDER BY id ASC');
     res.status(200).json(result.rows);
+    console.log("result.rows " + result.rows)
   } catch (error) {
     console.error('Error al obtener los artículos:', error);
     res.status(500).json({ error: 'Error al obtener los artículos' });
@@ -23,6 +24,8 @@ router.post('/', async (req, res) => {
       'INSERT INTO articulo (nombre, descripcion, precio, fecha_modificacion) VALUES ($1, $2, $3, NOW()) RETURNING *',
       [nombre, descripcion, precio]
     );
+    console.log('after query INSERT = ' + nombre + descripcion + precio);
+    console.log("result = " + result.rows[0])
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error al crear artículo:', error);
