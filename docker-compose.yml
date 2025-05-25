@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres-articulos
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: articulosdb
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  microservicio:
+    build: .
+    container_name: articulos-api
+    depends_on:
+      - db
+    ports:
+      - "4000:4000"
