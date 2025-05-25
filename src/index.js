@@ -12,5 +12,5 @@ app.use('/api/articulos', articulosRoutes);
 const PORT = process.env.PORT || 3000;
 console.log('PUERTO QUE USARÁ EXPRESS:', PORT);
 app.listen(PORT, () => {
-  console.log(`Microservicio escuchando en http://localhost:${PORT}`);
+  console.log(`Microservicio escuchando en :${PORT}`);
 });
