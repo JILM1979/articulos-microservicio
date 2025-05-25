@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
+    console.log('Invocado get /');
     const result = await db.query('SELECT * FROM articulo ORDER BY id ASC');
     res.status(200).json(result.rows);
   } catch (error) {
@@ -16,6 +17,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    console.log('Invocado post /');
     const { nombre, descripcion, precio } = req.body;
     const result = await db.query(
       'INSERT INTO articulo (nombre, descripcion, precio, fecha_modificacion) VALUES ($1, $2, $3, NOW()) RETURNING *',
@@ -30,6 +32,7 @@ router.post('/', async (req, res) => {
 
 router.get('/lineas-pedido', async (req, res) => {
   try {
+    console.log('Invocado get /lineas-pedido');
     const result = await db.query('SELECT * FROM linea_pedido ORDER BY id ASC');
     res.status(200).json(result.rows);
   } catch (error) {
@@ -40,7 +43,7 @@ router.get('/lineas-pedido', async (req, res) => {
 
 router.post('/lineas-pedido', async (req, res) => {
   const lineas = req.body;
-
+  console.log('Invocado post /lineas-pedido');
   if (!Array.isArray(lineas) || lineas.length === 0) {
     return res.status(400).json({ error: 'El cuerpo debe ser un array de líneas de pedido.' });
   }
