@@ -27,7 +27,7 @@ RUN npm install
 COPY . .
 
 # Expone el puerto de escucha (opcional en Railway, pero está bien)
-#EXPOSE 4000
+EXPOSE 8080
 
 # Comando de arranque
 CMD ["sh", "./init.sh"]
