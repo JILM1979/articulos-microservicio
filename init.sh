@@ -1,8 +1,40 @@
 #!/bin/sh
-echo "Esperando a la base de datos..."
-while ! nc -z db 5432; do
+#echo "Esperando a la base de datos..."
+#while ! nc -z db 5432; do
+#  sleep 1
+#done
+#echo "Base de datos disponible!"
+
+#npm start
+
+
+echo "⏳ Esperando a que PostgreSQL esté disponible en $POSTGRES_HOST:$POSTGRES_PORT..."
+until nc -z "$POSTGRES_HOST" "$POSTGRES_PORT"; do
   sleep 1
 done
-echo "Base de datos disponible!"
 
-npm start
+echo "✅ PostgreSQL disponible. Creando tablas..."
+
+# Ejecutar las sentencias SQL
+psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB" <<EOF
+CREATE TABLE IF NOT EXISTS articulo (
+  id SERIAL PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  precio NUMERIC(10,2),
+  fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS linea_pedido (
+  id SERIAL PRIMARY KEY,
+  articulo_id INTEGER NOT NULL,
+  pedido_id TEXT NOT NULL,
+  cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+  FOREIGN KEY (articulo_id) REFERENCES articulo(id) ON DELETE CASCADE
+);
+EOF
+
+echo "✅ Tablas creadas. Iniciando servidor..."
+
+# Iniciar tu app
+npm run start
