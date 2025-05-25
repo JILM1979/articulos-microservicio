@@ -9,15 +9,15 @@
 
 #!/bin/sh
 
-echo "⏳ Esperando a que PostgreSQL esté disponible en $POSTGRES_HOST:$POSTGRES_PORT..."
-until nc -z "$POSTGRES_HOST" "$POSTGRES_PORT"; do
+echo "⏳ Esperando a que PostgreSQL esté disponible en $PGHOST:$PGPORT... ($PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$POSTGRES_DB)"
+until nc -z "$PGHOST" "$PGPORT"; do
   sleep 1
 done
 
 echo "✅ PostgreSQL disponible. Creando tablas..."
 
 # Ejecutar las sentencias SQL
-psql "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB" <<EOF
+psql "postgresql://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$POSTGRES_DB" <<EOF
 CREATE TABLE IF NOT EXISTS articulo (
   id SERIAL PRIMARY KEY,
   nombre TEXT NOT NULL,
